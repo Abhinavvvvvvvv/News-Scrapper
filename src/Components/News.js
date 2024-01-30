@@ -15,7 +15,6 @@ const News = (props) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
   };
   
-  document.title = `${capitalizeFirstLetter(props.category)}- News Scrapper`;
 
   const updateNews = async () => {
     props.setProgress(10);
@@ -32,16 +31,18 @@ const News = (props) => {
   };
 
   useEffect(() => {
+    document.title = `${capitalizeFirstLetter(props.category)}- News Scrapper`;
     updateNews();
-  });
+  },[]);
 
   const fetchMoreData = async () => {
-    setPage(page + 1);
+    const nextPage = page + 1
     const url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=${props.apiKey}&page=${page}&pageSize=${props.pageSize}`;
     let data = await fetch(url);
     let parsedData = await data.json();
     setArticles(articles.concat(parsedData.articles));
     setTotalResults(parsedData.totalResults);
+    setPage(nextPage)
   };
 
   return (
